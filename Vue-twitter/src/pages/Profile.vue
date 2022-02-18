@@ -22,7 +22,7 @@
         </div>
       </div>
       <!-- background image -->
-      <div class="bg-gray-300 h-40 relative">
+      <div class="bg-gray-300 h-40 relative flex-none">
         <!-- profile image -->
         <div
           class="
@@ -131,6 +131,10 @@
           마음에 들어요
         </div>
       </div>
+      <!-- tweet -->
+      <div class="overflow-y-auto">
+        <Tweet v-for="tweet in 10" :key="tweet" />
+      </div>
     </div>
     <Trends />
   </div>
@@ -138,8 +142,9 @@
 
 <script>
 import Trends from "../components/Trends.vue";
+import Tweet from "../components/Tweet.vue";
 export default {
-  components: { Trends },
+  components: { Trends, Tweet },
   setup() {},
 };
 </script>
