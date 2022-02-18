@@ -45,10 +45,16 @@
       </div>
     </div>
   </div>
+  <!-- Trends -->
+  <Trends />
 </template>
 
 <script>
-export default {};
+import Trends from "../components/Trends.vue";
+export default {
+  components: { Trends },
+  setup() {},
+};
 </script>
 
 <style>
