@@ -184,15 +184,15 @@
     </div>
     <!-- main section -->
     <div class="flex h-screen flex-1">
-      <Notifications />
+      <Message />
     </div>
   </div>
 </template>
 
 <script>
-import Notifications from "./pages/Notifications.vue";
+import Message from "./pages/Message.vue";
 export default {
-  components: { Notifications },
+  components: { Message },
   setup() {},
 };
 </script>
