@@ -69,7 +69,7 @@
           <span class="text-gray">2011년 10월</span>
         </div>
         <div>
-          <span class="font-bold mr-1">28</span>
+          <span class="font-bold mr-1">30</span>
           <span class="text-gray mr-3">팔로우 중</span>
           <span class="font-bold mr-1">7</span>
           <span class="text-gray">팔로워</span>
