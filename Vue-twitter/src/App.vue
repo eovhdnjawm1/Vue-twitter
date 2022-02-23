@@ -17,7 +17,8 @@
         <i class="fab fa-twitter text-3xl text-primary xl:ml-4 mb-3"></i>
         <!-- sidemenu icons -->
         <div class="flex flex-col items-start space-y-1">
-          <div
+          <router-link
+            :to="route.path"
             class="
               hover:text-primary hover:bg-blue-50
               px-4
@@ -25,109 +26,16 @@
               rounded-full
               cursor-pointer
             "
+            v-for="route in routes"
+            :key="route"
           >
-            <i class="fas fa-fw fa-home text-2xl"></i>
-            <span class="text-xl ml-5 hidden xl:inline-block">홈</span>
-          </div>
-
-          <!-- Home -->
-          <div
-            class="
-              hover:text-primary hover:bg-blue-50
-              px-4
-              py-2
-              rounded-full
-              cursor-pointer
-            "
-          >
-            <i class="fas fa-fw fa-hashtag text-2xl"></i>
-            <span class="text-xl ml-5 hidden xl:inline-block">탐색하기</span>
-          </div>
-          <!-- Home -->
-          <!-- 알림 -->
-          <div
-            class="
-              hover:text-primary hover:bg-blue-50
-              px-4
-              py-2
-              rounded-full
-              cursor-pointer
-            "
-          >
-            <i class="fas fa-fw fa-bell text-2xl"></i>
-            <span class="text-xl ml-5 hidden xl:inline-block">알림</span>
-          </div>
-          <!-- 알림 -->
-          <!-- 쪽지 -->
-          <div
-            class="
-              hover:text-primary hover:bg-blue-50
-              px-4
-              py-2
-              rounded-full
-              cursor-pointer
-            "
-          >
-            <i class="fas fa-fw fa-envelope text-2xl"></i>
-            <span class="text-xl ml-5 hidden xl:inline-block">쪽지</span>
-          </div>
-          <!-- 쪽지 -->
-          <!-- 북마크 -->
-          <div
-            class="
-              hover:text-primary hover:bg-blue-50
-              px-4
-              py-2
-              rounded-full
-              cursor-pointer
-            "
-          >
-            <i class="fas fa-fw fa-bookmark text-2xl"></i>
-            <span class="text-xl ml-5 hidden xl:inline-block">북마크</span>
-          </div>
-          <!-- 북마크 -->
-          <!-- 리스트 -->
-          <div
-            class="
-              hover:text-primary hover:bg-blue-50
-              px-4
-              py-2
-              rounded-full
-              cursor-pointer
-            "
-          >
-            <i class="fas fa-fw fa-list-alt text-2xl"></i>
-            <span class="text-xl ml-5 hidden xl:inline-block">리스트</span>
-          </div>
-          <!-- 리스트 -->
-          <!-- 프로필 -->
-          <div
-            class="
-              hover:text-primary hover:bg-blue-50
-              px-4
-              py-2
-              rounded-full
-              cursor-pointer
-            "
-          >
-            <i class="fas fa-fw fa-user text-2xl"></i>
-            <span class="text-xl ml-5 hidden xl:inline-block">프로필</span>
-          </div>
-          <!-- 프로필 -->
-          <!-- 더보기 -->
-          <div
-            class="
-              hover:text-primary hover:bg-blue-50
-              px-4
-              py-2
-              rounded-full
-              cursor-pointer
-            "
-          >
-            <i class="fas fa-fw fa-ellipsis-h text-2xl"></i>
-            <span class="text-xl ml-5 hidden xl:inline-block">더보기</span>
-          </div>
-          <!-- 더보기 -->
+            <!-- <i class="fas fa-fw fa-home text-2xl"></i> -->
+            <i :class="route.icon"></i>
+            <!-- <span class="text-xl ml-5 hidden xl:inline-block">홈</span> -->
+            <span class="text-xl ml-5 hidden xl:inline-block">{{
+              route.title
+            }}</span>
+          </router-link>
         </div>
         <!-- twitter logo -->
         <!-- twitter button -->
@@ -184,16 +92,28 @@
     </div>
     <!-- main section -->
     <div class="flex h-screen flex-1">
-      <Profile />
+      <router-view />
     </div>
   </div>
 </template>
 
 <script>
-import Profile from "./pages/Profile.vue";
+import { ref, onBeforeMount } from "vue";
+import router from "./router";
+
 export default {
-  components: { Profile },
-  setup() {},
+  setup() {
+    // ref 안에 들어갈껀 초기값이다
+    const routes = ref([]);
+
+    onBeforeMount(() => {
+      routes.value = router.options.routes;
+    });
+
+    return {
+      routes,
+    };
+  },
 };
 </script>
 
