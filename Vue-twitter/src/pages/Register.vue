@@ -58,6 +58,7 @@
 
 <script>
 import { ref } from "vue";
+import { auth } from "../firebase";
 export default {
   setup() {
     const username = ref("");
@@ -65,8 +66,16 @@ export default {
     const password = ref("");
     const loading = ref(true);
 
-    const onRegister = () => {
-      console.log(username.value, email.value, password.value);
+    const onRegister = async () => {
+      try {
+        const credential = await auth.createUserWithEmailAndPassword(
+          email.value,
+          password.value
+        );
+        console.log(credential);
+      } catch (e) {
+        console.log("create use with email and password error:", e);
+      }
     };
     return {
       username,
