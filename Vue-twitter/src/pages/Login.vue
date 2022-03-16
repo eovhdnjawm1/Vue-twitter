@@ -7,7 +7,7 @@
     <span class="text-2xl font-bold">뜨위떠 로그인</span>
     <input
       type="text"
-      v-model="username"
+      v-model="email"
       class="
         w-96
         px-4
@@ -20,8 +20,9 @@
     />
 
     <input
-      type="text"
+      type="password"
       v-model="password"
+      @keyup.enter="onLogin"
       class="
         rounded
         w-96
@@ -32,11 +33,15 @@
       "
       placeholder="비밀번호"
     />
+    <button v-if="loading" class="rounded-full w-96 bg-light text-white py-3">
+      로그인 중 입니다.
+    </button>
     <button
+      v-else
       @click="onLogin"
       class="rounded-full w-96 bg-primary text-white py-3 hover:bg-dark"
     >
-      회원가입
+      로그인
     </button>
     <router-link to="/register">
       <button class="text-primary">계정이 없으신가요? 회원가입 하기</button>
@@ -46,18 +51,45 @@
 
 <script>
 import { ref } from "vue";
+import { auth } from "../firebase";
+import { useRouter } from "vue-router";
+
 export default {
   setup() {
-    const username = ref("");
     const email = ref("");
     const password = ref("");
-    const loading = ref(true);
+    const loading = ref(false);
+    const router = useRouter();
 
-    const onLogin = () => {
-      console.log(username.value, email.value, password.value);
+    const onLogin = async () => {
+      try {
+        loading.value = true;
+        const { user } = await auth.signInWithEmailAndPassword(
+          email.value,
+          password.value
+        );
+        console.log(user.uid);
+        router.replace("/");
+      } catch (e) {
+        switch (e.code) {
+          case "auth/invalid-email":
+            alert("잘못된 이메일 형식입니다.");
+            break;
+          case "auth/wrong-password":
+            alert("비밀번호가 틀립니다.");
+            break;
+          case "auth/user-not-found":
+            alert("등록되지 않은 이메일입니다.");
+            break;
+          default:
+            alert(e.message);
+            break;
+        }
+      } finally {
+        loading.value = false;
+      }
     };
     return {
-      username,
       email,
       password,
       onLogin,
