@@ -1,8 +1,9 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore} from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
+import firebase from 'firebase'
+// import { initializeApp } from "firebase/app";
+// import { getAuth } from "firebase/auth";
+// import { getFirestore} from 'firebase/firestore';
+// import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCm757eLh2p47ADs7Mx7xbrtcdSC5pRQIc",
@@ -15,13 +16,19 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// const app = initializeApp(firebaseConfig);
 
-export const auth = getAuth()
+firebase.initializeApp(firebaseConfig)
 
-export const db = getFirestore()
+export const auth = firebase.auth()
+export const db = firebase.firestore()
+export const storage = firebase.storage()
+export const USER_COLEECTION = db.collection('users')
+// export const auth = getAuth()
 
-export const storage = getStorage()
+// export const db = getFirestore()
+
+// export const storage = getStorage()
 
 
 
