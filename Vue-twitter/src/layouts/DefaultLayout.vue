@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen container mx-auto">
+  <div class="flex h-screen container mx-auto relative">
     <!-- side Section -->
     <div
       class="
@@ -58,7 +58,7 @@
         </div>
       </div>
       <!-- 프로필 버튼 -->
-      <div class="xl:pr-3 mb-3 flex justify-center">
+      <div class="xl:pr-3 mb-3 flex relative" @click="showProfileDrop = true">
         <button
           class="
             hidden
@@ -94,24 +94,68 @@
     <div class="flex h-screen flex-1">
       <router-view />
     </div>
+    <!-- profile dropdown menu -->
+    <div
+      v-if="showProfileDrop"
+      @click="showProfileDrop = false"
+      class="absolute bottom-20 left-10 shadow rounded-lg w-60 bg-white"
+    >
+      <button
+        class="
+          hover:bg-gray-50
+          border-b border-gray-100
+          flex
+          p-3
+          w-full
+          items-center
+        "
+      >
+        <img
+          src="http://picsum.photos/200"
+          class="w-10 h-10 rounded-full"
+          alt="#"
+        />
+        <div class="ml-2">
+          <div class="font-bold text-sm">skyyj32@naver.com</div>
+          <div class="text-left text-gray500 text-sm">@skyyj32</div>
+        </div>
+        <i class="fas fa-check text-primary ml-auto"></i>
+      </button>
+      <button
+        @click="onLogout"
+        class="hover:bg-gray-50 p-3 w-full text-left text-sm"
+      >
+        @skyyj32 계정에서 로그아웃
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
 import { ref, onBeforeMount } from "vue";
 import router from "../router";
+import { auth } from "../firebase";
+import store from "../store";
 
 export default {
   setup() {
     // ref 안에 들어갈껀 초기값이다
     const routes = ref([]);
+    const showProfileDrop = ref(false);
 
+    const onLogout = async () => {
+      await auth.signOut()
+      store.commit('SET_USER', null)
+      await router.replace('/login')
+    }
     onBeforeMount(() => {
       routes.value = router.options.routes;
     });
 
     return {
       routes,
+      showProfileDrop,
+      onLogout,
     };
   },
 };

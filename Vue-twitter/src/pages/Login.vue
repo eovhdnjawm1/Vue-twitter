@@ -51,8 +51,9 @@
 
 <script>
 import { ref } from "vue";
-import { auth } from "../firebase";
+import { auth, USER_COLEECTION } from "../firebase";
 import { useRouter } from "vue-router";
+import store from "../store";
 
 export default {
   setup() {
@@ -72,7 +73,11 @@ export default {
           email.value,
           password.value
         );
-        console.log(user.uid);
+
+        // get user info
+        const doc = await USER_COLEECTION.doc(user.uid).get();
+        store.commit("SET_USER", doc.data());
+
         router.replace("/");
       } catch (e) {
         switch (e.code) {

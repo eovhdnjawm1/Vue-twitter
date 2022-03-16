@@ -5,6 +5,7 @@ import Message from '../pages/Message.vue'
 import Profile from '../pages/Profile.vue'
 import Login from '../pages/Login.vue'
 import Register from '../pages/Register.vue'
+import store from '../store'
 
 const routes = [
     {
@@ -14,7 +15,8 @@ const routes = [
         icon: 'fas fa-fw fa-home text-2xl',
         meta: {
             isMenu: true,
-            layout: 'DefaultLayout'
+            layout: 'DefaultLayout',
+            requireAuth: true,
         }
     },
     {
@@ -24,7 +26,8 @@ const routes = [
         icon: 'fas fa-fw fa-hashtag text-2xl',
         meta: {
             isMenu: true,
-            layout: 'DefaultLayout'
+            layout: 'DefaultLayout',
+            requireAuth: true,
         }
     },
     {
@@ -34,7 +37,8 @@ const routes = [
         icon: 'fas fa-fw fa-bell text-2xl',
         meta: {
             isMenu: true,
-            layout: 'DefaultLayout'
+            layout: 'DefaultLayout',
+            requireAuth: true,
         }
     },
     {
@@ -44,7 +48,8 @@ const routes = [
         icon: 'fas fa-fw fa-envelope text-2xl',
         meta: {
             isMenu: true,
-            layout: 'DefaultLayout'
+            layout: 'DefaultLayout',
+            requireAuth: true,
         }
     },
     {
@@ -54,7 +59,8 @@ const routes = [
         icon: 'fas fa-fw fa-bookmark text-2xl',
         meta: {
             isMenu: true,
-            layout: 'DefaultLayout'
+            layout: 'DefaultLayout',
+            requireAuth: true,
         }
     },
     {
@@ -64,7 +70,8 @@ const routes = [
         icon: 'fas fa-fw fa-list-alt text-2xl',
         meta: {
             isMenu: true,
-            layout: 'DefaultLayout'
+            layout: 'DefaultLayout',
+            requireAuth: true,
         }
     },
     {
@@ -74,7 +81,8 @@ const routes = [
         icon: 'fas fa-fw fa-user text-2xl',
         meta: {
             isMenu: true,
-            layout: 'DefaultLayout'
+            layout: 'DefaultLayout',
+            requireAuth: true,
         }
     },
     {
@@ -84,7 +92,8 @@ const routes = [
         icon: 'fas fa-fw fa-ellipsis-h text-2xl',
         meta: {
             isMenu: true,
-            layout: 'DefaultLayout'
+            layout: 'DefaultLayout',
+            requireAuth: true,
         }
     },
     {
@@ -92,7 +101,7 @@ const routes = [
         component: Register,
         meta: {
             isMenu: false,
-            layout: 'EmptyLayout'
+            layout: 'EmptyLayout',
         }
     },
     {
@@ -100,7 +109,7 @@ const routes = [
         component: Login,
         meta: {
             isMenu: false,
-            layout: 'EmptyLayout'
+            layout: 'EmptyLayout',
         }
     },
 ]
@@ -108,6 +117,15 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes,
+})
+
+router.beforeEach((to, from, next) =>{
+    const currentUser = store.state.user
+    const requireAuth = to.matched.some((record) => record.meta.requireAuth)
+    // not authenticated
+    if (requireAuth && !currentUser) next('/login')
+    // authenticated
+    else next()
 })
 
 export default router
