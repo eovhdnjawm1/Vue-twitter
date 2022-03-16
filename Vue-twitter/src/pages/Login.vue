@@ -62,6 +62,10 @@ export default {
     const router = useRouter();
 
     const onLogin = async () => {
+      if (!email.value || !password.value) {
+        alert("이메일, 비밀번호를 모두 입력해주세요");
+        return;
+      }
       try {
         loading.value = true;
         const { user } = await auth.signInWithEmailAndPassword(
