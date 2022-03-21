@@ -75,8 +75,10 @@
         >
           <img src="http://picsum.photos/100" class="w-10 h-10 rounded-full" />
           <div class="xl:ml-2 hidden xl:block">
-            <div class="text-sm font-bold">skyyj32.com</div>
-            <div class="text-xs text-gray-500 text-left">@young</div>
+            <div class="text-sm font-bold">{{ currentUser.email }}</div>
+            <div class="text-xs text-gray-500 text-left">
+              @{{ currentUser.username }}
+            </div>
           </div>
           <i
             class="ml-auto fas fa-ellipsis-h fa-fw text-xs hidden xl:block"
@@ -116,8 +118,10 @@
           alt="#"
         />
         <div class="ml-2">
-          <div class="font-bold text-sm">skyyj32@naver.com</div>
-          <div class="text-left text-gray500 text-sm">@skyyj32</div>
+          <div class="font-bold text-sm">{{ currentUser.email }}</div>
+          <div class="text-left text-gray500 text-sm">
+            {{ currentUser.username }}
+          </div>
         </div>
         <i class="fas fa-check text-primary ml-auto"></i>
       </button>
@@ -132,7 +136,7 @@
 </template>
 
 <script>
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, computed } from "vue";
 import router from "../router";
 import { auth } from "../firebase";
 import store from "../store";
@@ -143,11 +147,13 @@ export default {
     const routes = ref([]);
     const showProfileDrop = ref(false);
 
+    const currentUser = computed(() => store.state.user);
+
     const onLogout = async () => {
-      await auth.signOut()
-      store.commit('SET_USER', null)
-      await router.replace('/login')
-    }
+      await auth.signOut();
+      store.commit("SET_USER", null);
+      await router.replace("/login");
+    };
     onBeforeMount(() => {
       routes.value = router.options.routes;
     });
@@ -155,6 +161,7 @@ export default {
     return {
       routes,
       showProfileDrop,
+      currentUser,
       onLogout,
     };
   },
