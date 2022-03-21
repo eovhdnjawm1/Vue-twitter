@@ -94,6 +94,7 @@ export default {
         // collection은 doc의 모음
         const doc = USER_COLEECTION.doc(user.uid);
         await doc.set({
+          username: username.value,
           uid: user.uid,
           email: email.value,
           profile_image_url: "/profile.jpeg",
