@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../pages/Home.vue'
 import Notifications from '../pages/notifications.vue'
-import Messages from '../pages/Message.vue'
+import Message from '../pages/Message.vue'
 import Profile from '../pages/Profile.vue'
 import Login from '../pages/Login.vue'
 import Register from '../pages/Register.vue'
@@ -11,7 +11,6 @@ const routes = [
     {
         path: '/',
         component: Home,
-        name: 'home',
         title: '홈',
         icon: 'fas fa-fw fa-home text-2xl',
         meta: {
@@ -23,7 +22,6 @@ const routes = [
     {
         path: '/',
         component: Home,
-        name: 'explore',
         title: '탐색하기',
         icon: 'fas fa-fw fa-hashtag text-2xl',
         meta: {
@@ -35,7 +33,6 @@ const routes = [
     {
         path: '/notifications',
         component: Notifications,
-        name: 'notifications',
         title: '알림',
         icon: 'fas fa-fw fa-bell text-2xl',
         meta: {
@@ -45,9 +42,8 @@ const routes = [
         }
     },
     {
-        path: '/messages',
-        component: Messages,
-        name: 'messages',
+        path: '/message',
+        component: Message,
         title: '쪽지',
         icon: 'fas fa-fw fa-envelope text-2xl',
         meta: {
@@ -57,9 +53,8 @@ const routes = [
         }
     },
     {
-        path: '/bookmarks',
-        component: Home,
-        name: 'bookmarks',
+        path: '/bookmark',
+        component: Message,
         title: '북마크',
         icon: 'fas fa-fw fa-bookmark text-2xl',
         meta: {
@@ -70,8 +65,7 @@ const routes = [
     },
     {
         path: '/list',
-        component: Home,
-        name: 'list',
+        component: Message,
         title: '리스트',
         icon: 'fas fa-fw fa-list-alt text-2xl',
         meta: {
@@ -83,7 +77,6 @@ const routes = [
     {
         path: '/profile',
         component: Profile,
-        name: 'profile',
         title: '프로필',
         icon: 'fas fa-fw fa-user text-2xl',
         meta: {
@@ -94,8 +87,7 @@ const routes = [
     },
     {
         path: '/profile',
-        component: Home,
-        name: 'more',
+        component: Profile,
         title: '더 보기',
         icon: 'fas fa-fw fa-ellipsis-h text-2xl',
         meta: {
@@ -107,7 +99,6 @@ const routes = [
     {
         path: '/register',
         component: Register,
-        name: 'register',
         meta: {
             isMenu: false,
             layout: 'EmptyLayout',
@@ -116,7 +107,6 @@ const routes = [
     {
         path: '/login',
         component: Login,
-        name: 'login',
         meta: {
             isMenu: false,
             layout: 'EmptyLayout',

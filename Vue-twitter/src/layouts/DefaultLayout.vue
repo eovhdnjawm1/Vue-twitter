@@ -19,15 +19,13 @@
         <div class="flex flex-col items-start space-y-1">
           <router-link
             :to="route.path"
-            :class="`
+            class="
               hover:text-primary hover:bg-blue-50
               px-4
               py-2
               rounded-full
               cursor-pointer
-            ${
-              router.currentRoute.value.name == route.name ? 'text-primary' : ''
-            }`"
+            "
             v-for="route in routes"
             :key="route"
           >
@@ -75,10 +73,7 @@
             items-center
           "
         >
-          <img
-            :src="currentUser.profile_image_url"
-            class="w-10 h-10 rounded-full"
-          />
+          <img src="http://picsum.photos/100" class="w-10 h-10 rounded-full" />
           <div class="xl:ml-2 hidden xl:block">
             <div class="text-sm font-bold">{{ currentUser.email }}</div>
             <div class="text-xs text-gray-500 text-left">
@@ -91,7 +86,7 @@
         </button>
         <div class="xl:hidden flex justify-center">
           <img
-            :src="currentUser.profile_image_url"
+            src="http://picsum.photos/100"
             class="cursor-pointer hover:opacity-80 w-10 h-10 rounded-full"
           />
         </div>
@@ -118,7 +113,7 @@
         "
       >
         <img
-          :src="currentUser.profile_image_url"
+          src="http://picsum.photos/200"
           class="w-10 h-10 rounded-full"
           alt="#"
         />
@@ -134,7 +129,7 @@
         @click="onLogout"
         class="hover:bg-gray-50 p-3 w-full text-left text-sm"
       >
-        @{{ currentUser.username }} 계정에서 로그아웃
+        @skyyj32 계정에서 로그아웃
       </button>
     </div>
   </div>
@@ -168,7 +163,6 @@ export default {
       showProfileDrop,
       currentUser,
       onLogout,
-      router,
     };
   },
 };
