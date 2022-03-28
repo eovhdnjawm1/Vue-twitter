@@ -21,8 +21,9 @@
             :to="route.path"
             :class="`
               hover:text-primary hover:bg-blue-50
-              px-4
-              py-2
+              p-2
+              xl:px-4
+              xl:py-2
               rounded-full
               cursor-pointer
             ${
@@ -160,7 +161,9 @@ export default {
       await router.replace("/login");
     };
     onBeforeMount(() => {
-      routes.value = router.options.routes;
+      routes.value = router.options.routes.filter(
+        (route) => route.meta.isMenu === true
+      );
     });
 
     return {
