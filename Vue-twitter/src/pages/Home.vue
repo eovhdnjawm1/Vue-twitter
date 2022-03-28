@@ -68,7 +68,7 @@ import Trends from "../components/Trends.vue";
 import Tweet from "../components/Tweet.vue";
 import { ref, computed, onBeforeMount } from "vue";
 import store from "../store";
-import { TWEET_COLEECTION } from "../firebase";
+import { TWEET_COLEECTION, USER_COLEECTION } from "../firebase";
 
 export default {
   components: { Trends, Tweet },
@@ -80,13 +80,15 @@ export default {
     onBeforeMount(() => {
       // Mount 되기전에 했으면 하는 코드
       TWEET_COLEECTION.orderBy("create_at", "desc").onSnapshot((snapshot) => {
-        snapshot.docChanges().forEach((change) => {
+        snapshot.docChanges().forEach(async (change) => {
+          let tweet = await getUserInfo(change.doc.data());
+
           if (change.type === "added") {
             // 트윗 추가
-            tweets.value.splice(change.newIndex, 0, change.doc.data());
+            tweets.value.splice(change.newIndex, 0, tweet);
           } else if (change.type === "modified") {
             // 리트윗
-            tweets.value.splice(change.oldIndex, 1, change.doc.data());
+            tweets.value.splice(change.oldIndex, 1, tweet);
           } else if (change.type === "removed") {
             // 제거
             tweets.value.splice(change.oldIndex, 1);
@@ -94,6 +96,18 @@ export default {
         });
       });
     });
+
+    // 트윗을 올린 uid를 가지고 옴
+    const getUserInfo = async (tweet) => {
+      const doc = await USER_COLEECTION.doc(tweet.uid).get();
+      // tweet.profile_image_rul = doc.data().profile_image_rul;
+      // tweet.email = doc.data().email;
+      // tweet.username = doc.data().username;
+      tweet = { ...tweet, ...doc.data() };
+      console.log(tweet);
+
+      return tweet;
+    };
 
     const onAddTweet = async () => {
       try {
