@@ -7,17 +7,19 @@
       <!-- tweeting section -->
       <div class="flex px-3 py-3 border-b-8 border-gray-100">
         <img
-          src="http://picsum.photos/200"
+          :src="currentUser.profile_image_url"
           alt=""
           class="w-10 h-10 rounded-full hover:opacity-60 cursor-pointer"
         />
         <div class="flex flex-1 flex-col ml-2">
           <textarea
+            v-model="tweetBody"
             class="w-full text-lg font-bold focus:outline-none mb-3 resize-none"
             placeholder="무슨 일이 일어나고 있나요?"
           ></textarea>
           <div class="text-right">
             <button
+              @click="onAddTweet"
               class="
                 font-bold
                 bg-primary
@@ -34,7 +36,7 @@
         </div>
       </div>
       <!-- tweets -->
-      <Tweet />
+      <Tweet v-for="tweet in 5" :key="tweet" :currentUser="currentUser" />
     </div>
   </div>
   <!-- trend section -->
@@ -43,10 +45,35 @@
 
 <script>
 import Trends from "../components/Trends.vue";
+import Tweet from "../components/Tweet.vue";
+import { ref, computed } from "vue";
+import store from "../store";
+import { TWEET_COLEECTION } from "../firebase";
 
 export default {
-  components: { Trends },
-  setup() {},
+  components: { Trends, Tweet },
+  setup() {
+    const tweetBody = ref("");
+    const currentUser = computed(() => store.state.user);
+
+    const onAddTweet = async () => {
+      try {
+        const doc = TWEET_COLEECTION.doc();
+        await doc.set({
+          id: doc.id,
+          tweet_body: tweetBody.value,
+          uid: currentUser.uid,
+          create_at: Data.now(),
+          num_comments: 0,
+          num_retweets: 0,
+          num_likes: 0,
+        });
+      } catch (e) {
+        console.log("on add tweet error on hompage:", e);
+      }
+    };
+    return { currentUser, tweetBody, onAddTweet };
+  },
 };
 </script>
 
