@@ -19,6 +19,21 @@
           ></textarea>
           <div class="text-right">
             <button
+              v-if="!tweetBody.length"
+              class="
+                font-bold
+                bg-light
+                text-white
+                px-4
+                py-2
+                rounded-full
+                cursor-default
+              "
+            >
+              트윗
+            </button>
+            <button
+              v-else
               @click="onAddTweet"
               class="
                 font-bold
@@ -36,7 +51,12 @@
         </div>
       </div>
       <!-- tweets -->
-      <Tweet v-for="tweet in 5" :key="tweet" :currentUser="currentUser" />
+      <Tweet
+        v-for="tweet in tweets"
+        :key="tweet.id"
+        :currentUser="currentUser"
+        :tweet="tweet"
+      />
     </div>
   </div>
   <!-- trend section -->
@@ -46,7 +66,7 @@
 <script>
 import Trends from "../components/Trends.vue";
 import Tweet from "../components/Tweet.vue";
-import { ref, computed } from "vue";
+import { ref, computed, onBeforeMount } from "vue";
 import store from "../store";
 import { TWEET_COLEECTION } from "../firebase";
 
@@ -55,6 +75,25 @@ export default {
   setup() {
     const tweetBody = ref("");
     const currentUser = computed(() => store.state.user);
+    const tweets = ref([]);
+
+    onBeforeMount(() => {
+      // Mount 되기전에 했으면 하는 코드
+      TWEET_COLEECTION.orderBy("create_at", "desc").onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === "added") {
+            // 트윗 추가
+            tweets.value.splice(change.newIndex, 0, change.doc.data());
+          } else if (change.type === "modified") {
+            // 리트윗
+            tweets.value.splice(change.oldIndex, 1, change.doc.data());
+          } else if (change.type === "removed") {
+            // 제거
+            tweets.value.splice(change.oldIndex, 1);
+          }
+        });
+      });
+    });
 
     const onAddTweet = async () => {
       try {
@@ -62,17 +101,18 @@ export default {
         await doc.set({
           id: doc.id,
           tweet_body: tweetBody.value,
-          uid: currentUser.uid,
-          create_at: Data.now(),
+          uid: currentUser.value.uid,
+          create_at: Date.now(),
           num_comments: 0,
           num_retweets: 0,
           num_likes: 0,
         });
+        tweetBody.value = "";
       } catch (e) {
         console.log("on add tweet error on hompage:", e);
       }
     };
-    return { currentUser, tweetBody, onAddTweet };
+    return { currentUser, tweetBody, onAddTweet, tweets };
   },
 };
 </script>
