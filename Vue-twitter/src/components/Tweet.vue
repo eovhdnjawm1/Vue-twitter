@@ -11,7 +11,7 @@
     "
   >
     <img
-      src="http://picsum.photos/200"
+      :src="currentUser.profile_image_url"
       class="w10 h-10 rounded-full hover:opacity-60 cursor-pointer"
     />
     <div class="flex-1 flex flex-col ml-3 space-y-2">
@@ -62,7 +62,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: ["currentUser"],
+};
 </script>
 
 <style>
