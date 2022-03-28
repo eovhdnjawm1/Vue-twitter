@@ -16,8 +16,8 @@
     />
     <div class="flex-1 flex flex-col ml-3 space-y-2">
       <div class="text-sm space-x-1">
-        <span class="font-bold">{{ tweet.uid }}</span>
-        <span class="text-gray-500 text-xs">@</span>
+        <span class="font-bold">{{ tweet.email }}</span>
+        <span class="text-gray-500 text-xs">@{{ tweet.username }}</span>
         <span>.</span>
         <span class="text-gray-500 text-xs">{{
           moment(tweet.create_at).fromNow()
