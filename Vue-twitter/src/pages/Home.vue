@@ -69,6 +69,7 @@ import Tweet from "../components/Tweet.vue";
 import { ref, computed, onBeforeMount } from "vue";
 import store from "../store";
 import { TWEET_COLEECTION, USER_COLEECTION } from "../firebase";
+import addTweet from "../utils/addTweet";
 
 export default {
   components: { Trends, Tweet },
@@ -100,7 +101,7 @@ export default {
     // 트윗을 올린 uid를 가지고 옴
     const getUserInfo = async (tweet) => {
       const doc = await USER_COLEECTION.doc(tweet.uid).get();
-      // tweet.profile_image_rul = doc.data().profile_image_rul;
+      // tweet.profile_image_url = doc.data().profile_image_url;
       // tweet.email = doc.data().email;
       // tweet.username = doc.data().username;
       tweet = { ...tweet, ...doc.data() };
@@ -111,16 +112,7 @@ export default {
 
     const onAddTweet = async () => {
       try {
-        const doc = TWEET_COLEECTION.doc();
-        await doc.set({
-          id: doc.id,
-          tweet_body: tweetBody.value,
-          uid: currentUser.value.uid,
-          create_at: Date.now(),
-          num_comments: 0,
-          num_retweets: 0,
-          num_likes: 0,
-        });
+        await addTweet(tweetBody.value, currentUser.value);
         tweetBody.value = "";
       } catch (e) {
         console.log("on add tweet error on hompage:", e);
