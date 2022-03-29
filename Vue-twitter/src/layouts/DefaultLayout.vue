@@ -44,6 +44,7 @@
         <!-- twitter button -->
         <div class="w-full xl:pr-3 flex justify-center">
           <button
+            @click="showTweetModal = true"
             class="
               bg-primary
               text-white
@@ -138,6 +139,8 @@
         @{{ currentUser.username }} 계정에서 로그아웃
       </button>
     </div>
+    <tweet-modal v-if="showTweetModal" @close-modal="showTweetModal = false">
+    </tweet-modal>
   </div>
 </template>
 
@@ -146,12 +149,15 @@ import { ref, onBeforeMount, computed } from "vue";
 import router from "../router";
 import { auth } from "../firebase";
 import store from "../store";
+import TweetModal from "../components/TweetModal.vue";
 
 export default {
+  components: { TweetModal },
   setup() {
     // ref 안에 들어갈껀 초기값이다
     const routes = ref([]);
     const showProfileDrop = ref(false);
+    const showTweetModal = ref(false);
 
     const currentUser = computed(() => store.state.user);
 
@@ -172,6 +178,7 @@ export default {
       currentUser,
       onLogout,
       router,
+      showTweetModal,
     };
   },
 };
