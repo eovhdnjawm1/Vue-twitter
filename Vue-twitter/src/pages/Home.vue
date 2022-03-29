@@ -7,17 +7,34 @@
       <!-- tweeting section -->
       <div class="flex px-3 py-3 border-b-8 border-gray-100">
         <img
-          src="http://picsum.photos/200"
+          :src="currentUser.profile_image_url"
           alt=""
           class="w-10 h-10 rounded-full hover:opacity-60 cursor-pointer"
         />
         <div class="flex flex-1 flex-col ml-2">
           <textarea
+            v-model="tweetBody"
             class="w-full text-lg font-bold focus:outline-none mb-3 resize-none"
             placeholder="무슨 일이 일어나고 있나요?"
           ></textarea>
           <div class="text-right">
             <button
+              v-if="!tweetBody.length"
+              class="
+                font-bold
+                bg-light
+                text-white
+                px-4
+                py-2
+                rounded-full
+                cursor-default
+              "
+            >
+              트윗
+            </button>
+            <button
+              v-else
+              @click="onAddTweet"
               class="
                 font-bold
                 bg-primary
@@ -34,7 +51,12 @@
         </div>
       </div>
       <!-- tweets -->
-      <Tweet />
+      <Tweet
+        v-for="tweet in tweets"
+        :key="tweet.id"
+        :currentUser="currentUser"
+        :tweet="tweet"
+      />
     </div>
   </div>
   <!-- trend section -->
@@ -43,10 +65,69 @@
 
 <script>
 import Trends from "../components/Trends.vue";
+import Tweet from "../components/Tweet.vue";
+import { ref, computed, onBeforeMount } from "vue";
+import store from "../store";
+import { TWEET_COLEECTION, USER_COLEECTION } from "../firebase";
 
 export default {
-  components: { Trends },
-  setup() {},
+  components: { Trends, Tweet },
+  setup() {
+    const tweetBody = ref("");
+    const currentUser = computed(() => store.state.user);
+    const tweets = ref([]);
+
+    onBeforeMount(() => {
+      // Mount 되기전에 했으면 하는 코드
+      TWEET_COLEECTION.orderBy("create_at", "desc").onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach(async (change) => {
+          let tweet = await getUserInfo(change.doc.data());
+
+          if (change.type === "added") {
+            // 트윗 추가
+            tweets.value.splice(change.newIndex, 0, tweet);
+          } else if (change.type === "modified") {
+            // 리트윗
+            tweets.value.splice(change.oldIndex, 1, tweet);
+          } else if (change.type === "removed") {
+            // 제거
+            tweets.value.splice(change.oldIndex, 1);
+          }
+        });
+      });
+    });
+
+    // 트윗을 올린 uid를 가지고 옴
+    const getUserInfo = async (tweet) => {
+      const doc = await USER_COLEECTION.doc(tweet.uid).get();
+      // tweet.profile_image_rul = doc.data().profile_image_rul;
+      // tweet.email = doc.data().email;
+      // tweet.username = doc.data().username;
+      tweet = { ...tweet, ...doc.data() };
+      console.log(tweet);
+
+      return tweet;
+    };
+
+    const onAddTweet = async () => {
+      try {
+        const doc = TWEET_COLEECTION.doc();
+        await doc.set({
+          id: doc.id,
+          tweet_body: tweetBody.value,
+          uid: currentUser.value.uid,
+          create_at: Date.now(),
+          num_comments: 0,
+          num_retweets: 0,
+          num_likes: 0,
+        });
+        tweetBody.value = "";
+      } catch (e) {
+        console.log("on add tweet error on hompage:", e);
+      }
+    };
+    return { currentUser, tweetBody, onAddTweet, tweets };
+  },
 };
 </script>
 
