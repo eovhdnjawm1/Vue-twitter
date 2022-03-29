@@ -26,6 +26,7 @@ export const storage = firebase.storage()
 export const USER_COLEECTION = db.collection('users')
 export const TWEET_COLEECTION = db.collection('tweets')
 export const COMMENT_COLLECTION = db.collection('comments')
+export const RETWEET_COLLECTION = db.collection('retweets')
 // export const auth = getAuth()
 
 // export const db = getFirestore()
