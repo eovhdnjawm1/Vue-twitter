@@ -9,12 +9,9 @@
     <div
       class="
         flex
-        items-end
         justify-center
         min-h-screen
-        pt-4
-        px-4
-        pb-20
+        sm:pt-4 sm:px-4 sm:pb-20
         text-center
         sm:block sm:p-0
       "
@@ -24,18 +21,11 @@
         aria-hidden="true"
       ></div>
 
-      <span
-        class="hidden sm:inline-block sm:align-middle sm:h-screen"
-        aria-hidden="true"
-        >&#8203;</span
-      >
       <!-- contents -->
       <div
         @click.stop
         class="
-          relative
           inline-block
-          align-bottom
           bg-white
           rounded-lg
           text-left
@@ -43,11 +33,15 @@
           shadow-xl
           transform
           transition-all
-          sm:my-8 sm:align-middle sm:max-w-lg sm:w-full
+          sm:my-8 sm:align-middle sm:max-w-lg
+          w-full
         "
       >
-        <div class="border-b border-gray-100 px-4 p-2">
+        <div
+          class="border-b border-gray-100 p-2 flex justify-between items-center"
+        >
           <button
+            @click="$emit('close-modal')"
             class="
               fas
               fa-times
@@ -59,6 +53,38 @@
               rounded-full
             "
           ></button>
+          <!-- tweet button -->
+          <div class="text-right sm:hidden mr-3">
+            <button
+              v-if="!tweetBody.length"
+              class="
+                font-bold
+                bg-light
+                text-white
+                px-4
+                py-2
+                rounded-full
+                cursor-default
+              "
+            >
+              트윗
+            </button>
+            <button
+              v-else
+              @click="onAddTweet"
+              class="
+                font-bold
+                bg-primary
+                hover:bg-dark
+                text-white
+                px-4
+                py-2
+                rounded-full
+              "
+            >
+              트윗
+            </button>
+          </div>
         </div>
         <div class="flex p-4">
           <img
@@ -80,37 +106,6 @@
               rows="5"
               placeholder="무슨 일이 일어나고 있나요?"
             ></textarea>
-            <div class="text-right">
-              <button
-                v-if="!tweetBody.length"
-                class="
-                  font-bold
-                  bg-light
-                  text-white
-                  px-4
-                  py-2
-                  rounded-full
-                  cursor-default
-                "
-              >
-                트윗
-              </button>
-              <button
-                v-else
-                @click="onAddTweet"
-                class="
-                  font-bold
-                  bg-primary
-                  hover:bg-dark
-                  text-white
-                  px-4
-                  py-2
-                  rounded-full
-                "
-              >
-                트윗
-              </button>
-            </div>
           </div>
         </div>
       </div>
