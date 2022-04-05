@@ -69,6 +69,8 @@ import Tweet from "../components/Tweet.vue";
 import { ref, computed, onBeforeMount } from "vue";
 import store from "../store";
 import { TWEET_COLEECTION, USER_COLEECTION } from "../firebase";
+import addTweet from "../utils/addTweet";
+import getTweetInfo from "../utils/getTweetInfo";
 
 export default {
   components: { Trends, Tweet },
@@ -79,10 +81,9 @@ export default {
 
     onBeforeMount(() => {
       // Mount 되기전에 했으면 하는 코드
-      TWEET_COLEECTION.orderBy("create_at", "desc").onSnapshot((snapshot) => {
+      TWEET_COLEECTION.orderBy("created_at", "desc").onSnapshot((snapshot) => {
         snapshot.docChanges().forEach(async (change) => {
-          let tweet = await getUserInfo(change.doc.data());
-
+          let tweet = await getTweetInfo(change.doc.data(), currentUser.value);
           if (change.type === "added") {
             // 트윗 추가
             tweets.value.splice(change.newIndex, 0, tweet);
@@ -98,29 +99,10 @@ export default {
     });
 
     // 트윗을 올린 uid를 가지고 옴
-    const getUserInfo = async (tweet) => {
-      const doc = await USER_COLEECTION.doc(tweet.uid).get();
-      // tweet.profile_image_rul = doc.data().profile_image_rul;
-      // tweet.email = doc.data().email;
-      // tweet.username = doc.data().username;
-      tweet = { ...tweet, ...doc.data() };
-      console.log(tweet);
-
-      return tweet;
-    };
 
     const onAddTweet = async () => {
       try {
-        const doc = TWEET_COLEECTION.doc();
-        await doc.set({
-          id: doc.id,
-          tweet_body: tweetBody.value,
-          uid: currentUser.value.uid,
-          create_at: Date.now(),
-          num_comments: 0,
-          num_retweets: 0,
-          num_likes: 0,
-        });
+        await addTweet(tweetBody.value, currentUser.value);
         tweetBody.value = "";
       } catch (e) {
         console.log("on add tweet error on hompage:", e);

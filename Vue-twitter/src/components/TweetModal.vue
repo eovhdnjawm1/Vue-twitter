@@ -38,7 +38,7 @@
         "
       >
         <div
-          class="border-b border-gray-100 p-2 flex justify-between items-center"
+          class="border-b border-gray-100 p-2 flex items-center justify-between"
         >
           <button
             @click="$emit('close-modal')"
@@ -54,12 +54,13 @@
             "
           ></button>
           <!-- tweet button -->
-          <div class="text-right sm:hidden mr-3">
+          <div class="text-right sm:hidden">
             <button
               v-if="!tweetBody.length"
               class="
-                font-bold
                 bg-light
+                text-sm
+                font-bold
                 text-white
                 px-4
                 py-2
@@ -73,9 +74,10 @@
               v-else
               @click="onAddTweet"
               class="
-                font-bold
                 bg-primary
                 hover:bg-dark
+                text-sm
+                font-bold
                 text-white
                 px-4
                 py-2
@@ -88,7 +90,7 @@
         </div>
         <div class="flex p-4">
           <img
-            src="https://picsum.photos/100"
+            :src="currentUser.profile_image_url"
             alt=""
             class="w-10 h-10 rounded-full hover:opacity-60 cursor-pointer"
           />
@@ -106,6 +108,40 @@
               rows="5"
               placeholder="무슨 일이 일어나고 있나요?"
             ></textarea>
+            <!-- tweet button -->
+            <div class="text-right hidden sm:block">
+              <button
+                v-if="!tweetBody.length"
+                class="
+                  bg-light
+                  text-sm
+                  font-bold
+                  text-white
+                  px-4
+                  py-2
+                  rounded-full
+                  cursor-default
+                "
+              >
+                트윗
+              </button>
+              <button
+                v-else
+                @click="onAddTweet"
+                class="
+                  bg-primary
+                  hover:bg-dark
+                  text-sm
+                  font-bold
+                  text-white
+                  px-4
+                  py-2
+                  rounded-full
+                "
+              >
+                트윗
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -114,13 +150,29 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import addTweet from "../utils/addTweet";
+import store from "../store";
+
 export default {
-  setup() {
+  setup(props, { emit }) {
     const tweetBody = ref("");
+    const currentUser = computed(() => store.state.user);
+
+    const onAddTweet = async () => {
+      try {
+        await addTweet(tweetBody.value, currentUser.value);
+        tweetBody.value = "";
+        emit("close-modal");
+      } catch (e) {
+        console.log("on add tweet error on hompage:", e);
+      }
+    };
 
     return {
       tweetBody,
+      onAddTweet,
+      currentUser,
     };
   },
 };

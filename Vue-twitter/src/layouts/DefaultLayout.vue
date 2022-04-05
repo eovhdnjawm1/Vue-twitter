@@ -172,6 +172,8 @@ export default {
       showProfileDrop,
       currentUser,
       onLogout,
+      router,
+      showTweetModal,
     };
   },
 };

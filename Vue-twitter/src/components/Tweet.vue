@@ -20,7 +20,7 @@
         <span class="text-gray-500 text-xs">@{{ tweet.username }}</span>
         <span>.</span>
         <span class="text-gray-500 text-xs">{{
-          moment(tweet.create_at).fromNow()
+          moment(tweet.created_at).fromNow()
         }}</span>
       </div>
       <!-- tweet body -->
@@ -28,23 +28,35 @@
         {{ tweet.tweet_body }}
       </div>
       <!-- tweet actions -->
+      <!-- comment button -->
       <div class="flex justify-between pr-12">
-        <div class="text-gray-500 hover:text-primary">
+        <div
+          @click="showCommentModal = true"
+          class="text-gray-400 hover:text-primary"
+        >
           <i class="far fa-comment hover:bg-blue-50 rounded-full p-2"></i>
           <span class="ml-1 text-sm p-1">{{ tweet.num_comments }}</span>
         </div>
-
-        <div class="text-gray-500 hover:text-green-500">
+        <!-- retweet button -->
+        <div
+          v-if="!tweet.isRetweeted"
+          @click="handleRetweet(tweet)"
+          class="text-gray-400 hover:text-green-400"
+        >
           <i class="fa fa-retweet hover:bg-green-50 p-2 rounded-full"></i>
           <span class="ml-1 text-sm p-1">{{ tweet.num_retweets }}</span>
         </div>
-
-        <div class="text-gray-500 hover:text-red-500">
+        <div v-else @click="handleRetweet(tweet)" class="text-green-400">
+          <i class="fa fa-retweet hover:bg-green-50 p-2 rounded-full"></i>
+          <span class="ml-1 text-sm p-1">{{ tweet.num_retweets }}</span>
+        </div>
+        <!-- like button -->
+        <div class="text-gray-400 hover:text-red-500">
           <i class="far fa-heart hover:bg-red-50 rounded-full p-2"></i>
           <span class="ml-1 text-sm p-1">{{ tweet.num_likes }}</span>
         </div>
-
-        <div class="text-gray-500 hover:text-primary rounded-full">
+        <!-- share button -->
+        <div class="text-gray-400 hover:text-primary rounded-full">
           <i
             class="
               fa-solid fa-share-from-square
@@ -58,16 +70,28 @@
       <!-- tweets -->
     </div>
   </div>
+  <comment-modal
+    v-if="showCommentModal"
+    @close-modal="showCommentModal = false"
+    :tweet="tweet"
+  ></comment-modal>
 </template>
 
 <script>
 import moment from "moment";
+import { ref } from "vue";
+import commentModal from "./CommentModal.vue";
+import handleRetweet from "../utils/handleRetweet";
 
 export default {
+  components: { commentModal },
   props: ["currentUser", "tweet"],
   setup() {
+    const showCommentModal = ref(false);
     return {
       moment,
+      showCommentModal,
+      handleRetweet,
     };
   },
 };
