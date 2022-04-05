@@ -20,7 +20,7 @@
         <span class="text-gray-500 text-xs">@{{ tweet.username }}</span>
         <span>.</span>
         <span class="text-gray-500 text-xs">{{
-          moment(tweet.create_at).fromNow()
+          moment(tweet.created_at).fromNow()
         }}</span>
       </div>
       <!-- tweet body -->

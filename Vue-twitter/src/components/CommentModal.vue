@@ -105,7 +105,7 @@
                   <span class="font-bold text-sm">{{ tweet.email }}</span>
                   <span class="text-gray text-sm">@{{ tweet.username }}</span>
                   <span class="text-gray text-sm">{{
-                    moment(tweet.create_at).fromNow()
+                    moment(tweet.created_at).fromNow()
                   }}</span>
                 </div>
                 <div class="text-sm">

@@ -81,7 +81,7 @@ export default {
 
     onBeforeMount(() => {
       // Mount 되기전에 했으면 하는 코드
-      TWEET_COLEECTION.orderBy("create_at", "desc").onSnapshot((snapshot) => {
+      TWEET_COLEECTION.orderBy("created_at", "desc").onSnapshot((snapshot) => {
         snapshot.docChanges().forEach(async (change) => {
           let tweet = await getTweetInfo(change.doc.data(), currentUser.value);
           console.log(tweet);

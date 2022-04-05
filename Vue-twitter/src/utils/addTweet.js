@@ -9,7 +9,7 @@ export default  (tweetBody, currentUser) => {
 			id: doc.id,
 			tweet_body: tweetBody,
 			uid: currentUser.uid,
-			create_at: Date.now(),
+			created_at: Date.now(),
 			num_comments: 0,
 			num_retweets: 0,
 			num_likes: 0,
