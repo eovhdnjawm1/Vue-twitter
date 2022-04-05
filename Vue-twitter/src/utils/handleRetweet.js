@@ -4,12 +4,18 @@ import firebase from 'firebase'
 
 export default async (tweet) => {
 	try {
+		// Already retweeted
+		// Delete retweet doc
+		// rnum_retweets -1
+		
+
+		// first retweeted
 		const doc = RETWEET_COLLECTION.doc()
 		await doc.set({
-			"id": doc.id,
-			"from_tweet_id": TWEET_COLEECTION.id,
-			"uid": store.state.user.uid,
-			"created_at": Date.now(),
+			id: doc.id,
+			from_tweet_id: tweet.id,
+			uid: store.state.user.uid,
+			created_at: Date.now(),
 		})
 
 		await TWEET_COLEECTION.doc(tweet.id).update({
