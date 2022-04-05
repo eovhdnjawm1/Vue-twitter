@@ -32,26 +32,31 @@
       <div class="flex justify-between pr-12">
         <div
           @click="showCommentModal = true"
-          class="text-gray-500 hover:text-primary"
+          class="text-gray-400 hover:text-primary"
         >
           <i class="far fa-comment hover:bg-blue-50 rounded-full p-2"></i>
           <span class="ml-1 text-sm p-1">{{ tweet.num_comments }}</span>
         </div>
         <!-- retweet button -->
         <div
+          v-if="!tweet.isRetweeted"
           @click="handleRetweet(tweet)"
-          class="text-gray-500 hover:text-green-500"
+          class="text-gray-400 hover:text-green-400"
         >
           <i class="fa fa-retweet hover:bg-green-50 p-2 rounded-full"></i>
           <span class="ml-1 text-sm p-1">{{ tweet.num_retweets }}</span>
         </div>
+        <div v-else @click="handleRetweet(tweet)" class="text-green-400">
+          <i class="fa fa-retweet hover:bg-green-50 p-2 rounded-full"></i>
+          <span class="ml-1 text-sm p-1">{{ tweet.num_retweets }}</span>
+        </div>
         <!-- like button -->
-        <div class="text-gray-500 hover:text-red-500">
+        <div class="text-gray-400 hover:text-red-500">
           <i class="far fa-heart hover:bg-red-50 rounded-full p-2"></i>
           <span class="ml-1 text-sm p-1">{{ tweet.num_likes }}</span>
         </div>
         <!-- share button -->
-        <div class="text-gray-500 hover:text-primary rounded-full">
+        <div class="text-gray-400 hover:text-primary rounded-full">
           <i
             class="
               fa-solid fa-share-from-square
