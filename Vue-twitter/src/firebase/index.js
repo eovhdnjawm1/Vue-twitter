@@ -28,6 +28,7 @@ export const TWEET_COLEECTION = db.collection('tweets')
 export const COMMENT_COLLECTION = db.collection('comments')
 export const RETWEET_COLLECTION = db.collection('retweets')
 export const LIKE_COLLECTION = db.collection('likes')
+export const MESSAGE_COLLECTION = db.collection('messages')
 // export const auth = getAuth()
 
 // export const db = getFirestore()

@@ -73,7 +73,7 @@ export default {
         //   ">",
         //   dateFrom
         // )
-          const snapshot = await TWEET_COLEECTION.where("uid", "==", following)
+        const snapshot = await TWEET_COLEECTION.where("uid", "==", following)
           .orderBy("created_at", "desc")
           .get();
         snapshot.docs.forEach(async (doc) => {
