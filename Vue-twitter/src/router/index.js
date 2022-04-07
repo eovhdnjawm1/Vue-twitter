@@ -6,6 +6,7 @@ import Profile from '../pages/Profile.vue'
 import Login from '../pages/Login.vue'
 import Register from '../pages/Register.vue'
 import store from '../store'
+import TweetPage from '../pages/TweetPage.vue'
 
 const routes = [
     {
@@ -107,6 +108,16 @@ const routes = [
     {
         path: '/register',
         component: Register,
+        name: 'tweetpage',
+        meta: {
+            isMenu: false,
+            layout: 'EmptyLayout',
+            requireAuth: true,
+        }
+    },
+    {
+        path: '/tweet/:id',
+        component: TweetPage,
         name: 'register',
         meta: {
             isMenu: false,
