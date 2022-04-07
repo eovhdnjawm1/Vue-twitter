@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen container mx-auto relative">
+  <div class="flex h-screen container mx-auto relative" v-if="currentUser">
     <!-- side Section -->
     <div
       class="
