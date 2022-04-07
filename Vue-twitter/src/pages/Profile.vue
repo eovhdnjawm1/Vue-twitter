@@ -17,8 +17,8 @@
           ></i>
         </button>
         <div>
-          <div class="font-extrabold text-lg">skyyj32.com</div>
-          <div class="text-xs text-gray">4234 트윗</div>
+          <div class="font-extrabold text-lg">{{ currentUser.email }}</div>
+          <div class="text-xs text-gray">{{ currentUser.num_tweets }} 트윗</div>
         </div>
       </div>
       <!-- background image -->
@@ -37,7 +37,7 @@
           "
         >
           <img
-            src="http://picsum.photos/200"
+            :src="currentUser.profile_image_url"
             class="rounded-full opacity-90 hover:opacity-100 cursor-pointer"
             alt=""
           />
@@ -62,16 +62,20 @@
       </div>
       <!-- user info -->
       <div class="mx-3 mt-2">
-        <div class="font-extrabold text-lg">skyyj32.com</div>
-        <div class="text-gray">@skyyj32</div>
+        <div class="font-extrabold text-lg">{{ currentUser.email }}</div>
+        <div class="text-gray">@{{ currentUser.username }}</div>
         <div>
           <span class="text-gray">가입일:</span>
-          <span class="text-gray">2011년 10월</span>
+          <span class="text-gray">{{
+            moment(currentUser.created_at).format("YYYY년 MM월 DD일")
+          }}</span>
         </div>
         <div>
-          <span class="font-bold mr-1">30</span>
+          <span class="font-bold mr-1">{{
+            currentUser.followings.length
+          }}</span>
           <span class="text-gray mr-3">팔로우 중</span>
-          <span class="font-bold mr-1">7</span>
+          <span class="font-bold mr-1">{{ currentUser.followers.length }}</span>
           <span class="text-gray">팔로워</span>
         </div>
       </div>
@@ -133,7 +137,12 @@
       </div>
       <!-- tweet -->
       <div class="overflow-y-auto">
-        <Tweet v-for="tweet in 10" :key="tweet" />
+        <Tweet
+          v-for="tweet in tweets"
+          :key="tweet.id"
+          :currentUser="currentUser"
+          :tweet="tweet"
+        />
       </div>
     </div>
     <Trends />
@@ -143,9 +152,52 @@
 <script>
 import Trends from "../components/Trends.vue";
 import Tweet from "../components/Tweet.vue";
+import store from "../store";
+import { computed, ref, onBeforeMount } from "vue";
+import { TWEET_COLEECTION, USER_COLEECTION } from "../firebase";
+import getTweetInfo from "../utils/getTweetInfo";
+import moment from "moment";
+
 export default {
   components: { Trends, Tweet },
-  setup() {},
+  setup() {
+    const currentUser = computed(() => store.state.user);
+    const tweets = ref([]);
+
+    onBeforeMount(() => {
+      // 실시간으로 트윗 변경된것을 카운트 해줘야함
+      USER_COLEECTION.doc(currentUser.value.uid).onSnapshot((doc) => {
+        store.commit("SET_USER", doc.data());
+      });
+
+      // Mount 되기전에 했으면 하는 코드
+      TWEET_COLEECTION.where("uid", "==", currentUser.value.uid)
+        .orderBy("created_at", "desc")
+        .onSnapshot((snapshot) => {
+          snapshot.docChanges().forEach(async (change) => {
+            let tweet = await getTweetInfo(
+              change.doc.data(),
+              currentUser.value
+            );
+            if (change.type === "added") {
+              // 트윗 추가
+              tweets.value.splice(change.newIndex, 0, tweet);
+            } else if (change.type === "modified") {
+              // 리트윗
+              tweets.value.splice(change.oldIndex, 1, tweet);
+            } else if (change.type === "removed") {
+              // 제거
+              tweets.value.splice(change.oldIndex, 1);
+            }
+          });
+        });
+    });
+    return {
+      currentUser,
+      tweets,
+      moment,
+    };
+  },
 };
 </script>
 
