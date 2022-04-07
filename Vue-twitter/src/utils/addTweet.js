@@ -15,6 +15,8 @@ export default  (tweetBody, currentUser) => {
 			num_retweets: 0,
 			num_likes: 0,
 		  });
+		  
+		// USER tweet update
 		  await USER_COLEECTION.doc(currentUser.uid).update({
 			num_tweets: firebase.firestore.FieldValue.increment(1),})
 
