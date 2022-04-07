@@ -82,63 +82,69 @@
       <!-- tabs -->
       <div class="flex border-b border-color mt-3">
         <div
-          class="
-            text-center text-primary
-            border-b border-primary
-            w-1/4
+          @click="currentTab = 'tweet'"
+          :class="`${
+            currentTab == 'tweet'
+              ? 'border-b border-primary text-primary'
+              : 'text-gray'
+          }
+            text-center 
+            w-1/3
             hover:bg-blue-50
             cursor-pointer
             hover:text-primary
             py-3
             font-bold
-          "
+          `"
         >
           트윗
         </div>
         <div
-          class="
-            text-center text-gray
-            w-1/4
+          @click="currentTab = 'retweet'"
+          :class="`${
+            currentTab == 'retweet'
+              ? 'border-b border-primary text-primary'
+              : 'text-gray'
+          }
+            text-center
+            w-1/3
             hover:bg-blue-50
             cursor-pointer
             hover:text-primary
             py-3
             font-bold
-          "
+          `"
         >
-          트윗 및 답글
+          리트윗
         </div>
+
         <div
-          class="
-            text-center text-gray
-            w-1/4
+          @click="currentTab = 'like'"
+          :class="`${
+            currentTab == 'like'
+              ? 'border-b border-primary text-primary'
+              : 'text-gray'
+          }
+            text-center
+            w-1/3
             hover:bg-blue-50
             cursor-pointer
             hover:text-primary
             py-3
             font-bold
-          "
+          `"
         >
-          미디어
-        </div>
-        <div
-          class="
-            text-center text-gray
-            w-1/4
-            hover:bg-blue-50
-            cursor-pointer
-            hover:text-primary
-            py-3
-            font-bold
-          "
-        >
-          마음에 들어요
+          좋아요
         </div>
       </div>
       <!-- tweet -->
       <div class="overflow-y-auto">
         <Tweet
-          v-for="tweet in tweets"
+          v-for="tweet in currentTab == 'tweet'
+            ? tweets
+            : currentTab == 'retweet'
+            ? reTweets
+            : likeTweets"
           :key="tweet.id"
           :currentUser="currentUser"
           :tweet="tweet"
@@ -154,7 +160,12 @@ import Trends from "../components/Trends.vue";
 import Tweet from "../components/Tweet.vue";
 import store from "../store";
 import { computed, ref, onBeforeMount } from "vue";
-import { TWEET_COLEECTION, USER_COLEECTION } from "../firebase";
+import {
+  TWEET_COLEECTION,
+  USER_COLEECTION,
+  RETWEET_COLLECTION,
+  LIKE_COLLECTION,
+} from "../firebase";
 import getTweetInfo from "../utils/getTweetInfo";
 import moment from "moment";
 
@@ -163,6 +174,9 @@ export default {
   setup() {
     const currentUser = computed(() => store.state.user);
     const tweets = ref([]);
+    const reTweets = ref([]);
+    const likeTweets = ref([]);
+    const currentTab = ref("tweet");
 
     onBeforeMount(() => {
       // 실시간으로 트윗 변경된것을 카운트 해줘야함
@@ -191,11 +205,53 @@ export default {
             }
           });
         });
+      RETWEET_COLLECTION.where("uid", "==", currentUser.value.uid)
+        .orderBy("created_at", "desc")
+        .onSnapshot((snapshot) => {
+          snapshot.docChanges().forEach(async (change) => {
+            const doc = await TWEET_COLEECTION.doc(
+              change.doc.data().from_tweet_id
+            ).get();
+            let tweet = await getTweetInfo(doc.data(), currentUser.value);
+
+            if (change.type === "added") {
+              reTweets.value.splice(change.newIndex, 0, tweet);
+            } else if (change.type === "modified") {
+              reTweets.value.splice(change.oldIndex, 1, tweet);
+            } else if (change.type === "removed") {
+              reTweets.value.splice(change.oldIndex, 1);
+            }
+          });
+        });
+      LIKE_COLLECTION.where("uid", "==", currentUser.value.uid)
+        .orderBy("created_at", "desc")
+        .onSnapshot((snapshot) => {
+          snapshot.docChanges().forEach(async (change) => {
+            const doc = await TWEET_COLEECTION.doc(
+              change.doc.data().from_tweet_id
+            ).get();
+            let tweet = await getTweetInfo(doc.data(), currentUser.value);
+
+            if (change.type === "added") {
+              // 트윗 추가
+              likeTweets.value.splice(change.newIndex, 0, tweet);
+            } else if (change.type === "modified") {
+              // 리트윗
+              likeTweets.value.splice(change.oldIndex, 1, tweet);
+            } else if (change.type === "removed") {
+              // 제거
+              likeTweets.value.splice(change.oldIndex, 1);
+            }
+          });
+        });
     });
     return {
       currentUser,
       tweets,
       moment,
+      currentTab,
+      reTweets,
+      likeTweets,
     };
   },
 };
