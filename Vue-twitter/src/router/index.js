@@ -108,7 +108,7 @@ const routes = [
     {
         path: '/register',
         component: Register,
-        name: 'tweetpage',
+        name: 'register',
         meta: {
             isMenu: false,
             layout: 'EmptyLayout',
@@ -117,11 +117,12 @@ const routes = [
     },
     {
         path: '/tweet/:id',
+        name: 'tweet',
         component: TweetPage,
-        name: 'register',
         meta: {
             isMenu: false,
-            layout: 'EmptyLayout',
+            layout: 'DefaultLayout',
+            requireAuth: true
         }
     },
     {
@@ -140,7 +141,7 @@ const router = createRouter({
     routes,
 })
 
-router.beforeEach((to, from, next) =>{
+router.beforeEach((to, from, next) => {
     const currentUser = store.state.user
     const requireAuth = to.matched.some((record) => record.meta.requireAuth)
     // not authenticated

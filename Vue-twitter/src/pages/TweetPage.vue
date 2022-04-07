@@ -94,9 +94,11 @@
             ></i>
           </button>
         </div>
-        <div class="h-px w-full bg-gray"></div>
+        <div class="h-px w-full bg-gray-100"></div>
         <!-- comments -->
         <div
+          v-for="comment in 10"
+          :key="comment"
           class="
             flex
             hover:bg-gray-100
@@ -110,34 +112,32 @@
             class="w-10 h-10 rounded-full hover:opacity-90 cursor-pointer"
             alt=""
           />
-          <div class="ml-2 flex-1 space-x-2">
-            <div class="flex items-center">
+          <div class="ml-2 flex-1">
+            <div class="flex items-center space-x-2">
               <span class="font-bold">skyyj32@nate.com</span>
               <span class="text-gray text-sm">@skyyj32</span>
               <span class="font-bold">19 days ago</span>
             </div>
-            <div>
-              <div>댓글</div>
-            </div>
-            <button>
-              <i
-                class="
-                  fas
-                  fa-trash
-                  text-red-400
-                  hover:bg-red-50
-                  w-10
-                  h-10
-                  rounded-full
-                  p-2
-                "
-              ></i>
-            </button>
+            <div>댓글</div>
           </div>
+          <button>
+            <i
+              class="
+                fas
+                fa-trash
+                text-red-400
+                hover:bg-red-50
+                w-10
+                h-10
+                rounded-full
+                p-2
+              "
+            ></i>
+          </button>
         </div>
       </div>
     </div>
-    <trends></trends>
+    <Trends />
   </div>
 </template>
 

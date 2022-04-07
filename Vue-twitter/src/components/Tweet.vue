@@ -24,9 +24,9 @@
         }}</span>
       </div>
       <!-- tweet body -->
-      <div>
+      <router-link :to="`/tweet/${tweet.id}`">
         {{ tweet.tweet_body }}
-      </div>
+      </router-link>
       <!-- tweet actions -->
       <!-- comment button -->
       <div class="flex justify-between pr-12">
