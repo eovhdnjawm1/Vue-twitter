@@ -17,6 +17,14 @@ const store = createStore({
     SET_PROFILE_IMAGE: (state, image) => {
       state.user.profile_image_url = image
     },
+    SET_FOLLOW: (state, uid) => {
+      state.user.followings.push(uid)
+    },
+    SET_UNFOLLOW: (state, uid) => {
+      state.user.followings = state.user.followings.filter(u => u !== uid)
+    },
+    
+
   },
   plugins: [createPersistedState()],
 })
