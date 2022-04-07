@@ -12,6 +12,7 @@ Vue, Vuex, tailwind, firebase를 이용하여 1인 작업을한 트위터 클론
 4. 쪽지 기능 (유저를 선택 후 메시지를 보내는 기능)
 5. 프로필 이미지, 프로필 배경 이미지 선택 및 교체 기능
 6. 반응형 레이아웃 기능
+7. Github를 사용한 issue 관리, pullrequests 
 
 ## 2. 개발 환경 및 배포
 
@@ -30,6 +31,8 @@ Vue, Vuex, tailwind, firebase를 이용하여 1인 작업을한 트위터 클론
 
 [URL]https://twitter-clone-youngjin.firebaseapp.com/
 
+![image](https://user-images.githubusercontent.com/70947883/162259097-63c35592-4a6d-4dfe-98df-52e8952a275c.png)
+![image](https://user-images.githubusercontent.com/70947883/162259174-ef26dc24-18cd-47d9-8936-096a8dd7bee0.png)
 
 ## 3. 프로젝트 구조와 개발 일정
 
