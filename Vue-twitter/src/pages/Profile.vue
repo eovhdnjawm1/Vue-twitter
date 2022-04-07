@@ -1,10 +1,10 @@
 <template>
-  <div class="flex-1 flex">
+  <div class="flex-1 flex" v-if="profileUser">
     <!-- profile section -->
     <div class="flex-1 flex flex-col border-r border-color">
       <!-- title   -->
       <div class="px-3 py-1 flex border-b border-color">
-        <button>
+        <button class="mr-4" @click="router.go(-1)">
           <i
             class="
               fas
@@ -17,8 +17,8 @@
           ></i>
         </button>
         <div>
-          <div class="font-extrabold text-lg">{{ currentUser.email }}</div>
-          <div class="text-xs text-gray">{{ currentUser.num_tweets }} 트윗</div>
+          <div class="font-extrabold text-lg">{{ profileUser.email }}</div>
+          <div class="text-xs text-gray">{{ profileUser.num_tweets }} 트윗</div>
         </div>
       </div>
       <!-- background image -->
@@ -37,7 +37,7 @@
           "
         >
           <img
-            :src="currentUser.profile_image_url"
+            :src="profileUser.profile_image_url"
             class="rounded-full opacity-90 hover:opacity-100 cursor-pointer"
             alt=""
           />
@@ -62,20 +62,20 @@
       </div>
       <!-- user info -->
       <div class="mx-3 mt-2">
-        <div class="font-extrabold text-lg">{{ currentUser.email }}</div>
-        <div class="text-gray">@{{ currentUser.username }}</div>
+        <div class="font-extrabold text-lg">{{ profileUser.email }}</div>
+        <div class="text-gray">@{{ profileUser.username }}</div>
         <div>
           <span class="text-gray">가입일:</span>
           <span class="text-gray">{{
-            moment(currentUser.created_at).format("YYYY년 MM월 DD일")
+            moment(profileUser.created_at).format("YYYY년 MM월 DD일")
           }}</span>
         </div>
         <div>
           <span class="font-bold mr-1">{{
-            currentUser.followings.length
+            profileUser.followings.length
           }}</span>
           <span class="text-gray mr-3">팔로우 중</span>
-          <span class="font-bold mr-1">{{ currentUser.followers.length }}</span>
+          <span class="font-bold mr-1">{{ profileUser.followers.length }}</span>
           <span class="text-gray">팔로워</span>
         </div>
       </div>
@@ -168,24 +168,31 @@ import {
 } from "../firebase";
 import getTweetInfo from "../utils/getTweetInfo";
 import moment from "moment";
+import { useRoute } from "vue-router";
+import router from "../router";
 
 export default {
   components: { Trends, Tweet },
   setup() {
     const currentUser = computed(() => store.state.user);
+    const profileUser = ref(null);
     const tweets = ref([]);
     const reTweets = ref([]);
     const likeTweets = ref([]);
     const currentTab = ref("tweet");
+    const route = useRoute();
 
     onBeforeMount(() => {
+      const profileUID = route.params.uid ?? currentUser.value.uid;
+      console.log(profileUID);
+
       // 실시간으로 트윗 변경된것을 카운트 해줘야함
-      USER_COLEECTION.doc(currentUser.value.uid).onSnapshot((doc) => {
-        store.commit("SET_USER", doc.data());
+      USER_COLEECTION.doc(profileUID).onSnapshot((doc) => {
+        profileUser.value = doc.data();
       });
 
       // Mount 되기전에 했으면 하는 코드
-      TWEET_COLEECTION.where("uid", "==", currentUser.value.uid)
+      TWEET_COLEECTION.where("uid", "==", profileUID)
         .orderBy("created_at", "desc")
         .onSnapshot((snapshot) => {
           snapshot.docChanges().forEach(async (change) => {
@@ -205,7 +212,7 @@ export default {
             }
           });
         });
-      RETWEET_COLLECTION.where("uid", "==", currentUser.value.uid)
+      RETWEET_COLLECTION.where("uid", "==", profileUID)
         .orderBy("created_at", "desc")
         .onSnapshot((snapshot) => {
           snapshot.docChanges().forEach(async (change) => {
@@ -223,7 +230,7 @@ export default {
             }
           });
         });
-      LIKE_COLLECTION.where("uid", "==", currentUser.value.uid)
+      LIKE_COLLECTION.where("uid", "==", profileUID)
         .orderBy("created_at", "desc")
         .onSnapshot((snapshot) => {
           snapshot.docChanges().forEach(async (change) => {
@@ -252,6 +259,8 @@ export default {
       currentTab,
       reTweets,
       likeTweets,
+      profileUser,
+      router,
     };
   },
 };

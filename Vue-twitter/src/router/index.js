@@ -94,6 +94,17 @@ const routes = [
         }
     },
     {
+        path: '/profile/:uid',
+        component: Profile,
+
+
+        meta: {
+            isMenu: false,
+            layout: 'DefaultLayout',
+            requireAuth: true,
+        }
+    },
+    {
         path: '/profile',
         component: Home,
         name: 'more',

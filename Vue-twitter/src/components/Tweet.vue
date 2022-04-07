@@ -10,10 +10,12 @@
       cursor-pointer
     "
   >
-    <img
-      :src="currentUser.profile_image_url"
-      class="w10 h-10 rounded-full hover:opacity-60 cursor-pointer"
-    />
+    <router-link :to="`/profile/${tweet.uid}`">
+      <img
+        :src="currentUser.profile_image_url"
+        class="w10 h-10 rounded-full hover:opacity-60 cursor-pointer"
+      />
+    </router-link>
     <div class="flex-1 flex flex-col ml-3 space-y-2">
       <div class="text-sm space-x-1">
         <span class="font-bold">{{ tweet.email }}</span>
