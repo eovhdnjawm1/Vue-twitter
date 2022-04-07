@@ -68,12 +68,12 @@ export default {
     onBeforeMount(() => {
       currentUser.value.followings.forEach(async (following) => {
         const dateFrom = Date.now() - 60 * 60 * 24 * 7 * 1000; // before 7 days
-        const snapshot = await TWEET_COLEECTION.where(
-          "create_at",
-          ">",
-          dateFrom
-        )
-          .where("uid", "==", following)
+        // const snapshot = await TWEET_COLEECTION.where(
+        //   "create_at",
+        //   ">",
+        //   dateFrom
+        // )
+          const snapshot = await TWEET_COLEECTION.where("uid", "==", following)
           .orderBy("created_at", "desc")
           .get();
         snapshot.docs.forEach(async (doc) => {
