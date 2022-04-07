@@ -23,6 +23,10 @@
       </div>
       <!-- background image -->
       <div class="bg-gray-300 h-40 relative flex-none">
+        <img
+          :src="profileUser.background_image_url"
+          class="w-full h-full object-cover"
+        />
         <!-- profile image -->
         <div
           class="
@@ -38,14 +42,24 @@
         >
           <img
             :src="profileUser.profile_image_url"
-            class="rounded-full opacity-90 hover:opacity-100 cursor-pointer"
+            class="
+              w-full
+              h-full
+              object-cover
+              rounded-full
+              opacity-90
+              hover:opacity-100
+              cursor-pointer
+            "
             alt=""
           />
         </div>
       </div>
       <!-- profile edit button -->
-      <div class="text-right mt-2 mr-2">
+      <div class="text-right mt-2 mr-2 h-14">
         <button
+          v-if="currentUser.uid === profileUser.uid"
+          @click="showProfileEditModal = true"
           class="
             border-2 border-primary
             text-primary
@@ -152,6 +166,11 @@
       </div>
     </div>
     <Trends />
+    <!-- <profile-edit-modal></profile-edit-modal> -->
+    <ProfileEditModal
+      v-if="showProfileEditModal"
+      @close-modal="showProfileEditModal = false"
+    />
   </div>
 </template>
 
@@ -170,9 +189,10 @@ import getTweetInfo from "../utils/getTweetInfo";
 import moment from "moment";
 import { useRoute } from "vue-router";
 import router from "../router";
+import ProfileEditModal from "../components/ProfileEditModal.vue";
 
 export default {
-  components: { Trends, Tweet },
+  components: { Trends, Tweet, ProfileEditModal },
   setup() {
     const currentUser = computed(() => store.state.user);
     const profileUser = ref(null);
@@ -181,6 +201,8 @@ export default {
     const likeTweets = ref([]);
     const currentTab = ref("tweet");
     const route = useRoute();
+
+    const showProfileEditModal = ref(false);
 
     onBeforeMount(() => {
       const profileUID = route.params.uid ?? currentUser.value.uid;
@@ -261,6 +283,7 @@ export default {
       likeTweets,
       profileUser,
       router,
+      showProfileEditModal,
     };
   },
 };
