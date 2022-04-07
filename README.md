@@ -31,8 +31,6 @@ Vue, Vuex, tailwind, firebase를 이용하여 1인 작업을한 트위터 클론
 
 [URL]https://twitter-clone-youngjin.firebaseapp.com/
 
-![image](https://user-images.githubusercontent.com/70947883/162259097-63c35592-4a6d-4dfe-98df-52e8952a275c.png)
-![image](https://user-images.githubusercontent.com/70947883/162259174-ef26dc24-18cd-47d9-8936-096a8dd7bee0.png)
 
 ## 3. 프로젝트 구조와 개발 일정
 
@@ -75,10 +73,13 @@ Vue, Vuex, tailwind, firebase를 이용하여 1인 작업을한 트위터 클론
 ## 4. UI
 ![image](https://user-images.githubusercontent.com/70947883/162257015-a2d65734-204d-4a97-aad2-2501a98310cf.png)
 
+## 5. Github
+![image](https://user-images.githubusercontent.com/70947883/162259097-63c35592-4a6d-4dfe-98df-52e8952a275c.png)
+![image](https://user-images.githubusercontent.com/70947883/162259174-ef26dc24-18cd-47d9-8936-096a8dd7bee0.png)
 
 <br/>
 
-## 5. 개발하며 고민한 부분 및 해결 방법
+## 6. 개발하며 고민한 부분 및 해결 방법
 
 - Vue, Vuex, tailwind를 사용하여 작업한 것이 처음이라 모든게 낯설었다.
 - 하지만 Vue 렌더링의 편리성, Vuex의 데이터관리, tailwind를 사용하여 빠르게 css 작업한다는 것에 새로운 기술을 알게되었다.
