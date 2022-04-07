@@ -1,4 +1,5 @@
-import {TWEET_COLEECTION} from '../firebase'
+import {TWEET_COLEECTION, USER_COLEECTION} from '../firebase'
+import firebase from 'firebase';
 
 export default  (tweetBody, currentUser) => {
 	
@@ -14,6 +15,11 @@ export default  (tweetBody, currentUser) => {
 			num_retweets: 0,
 			num_likes: 0,
 		  });
+		  
+		// USER tweet update
+		  await USER_COLEECTION.doc(currentUser.uid).update({
+			num_tweets: firebase.firestore.FieldValue.increment(1),})
+
 		  resolve(true);
 		} catch (e) {
 		  reject(e);

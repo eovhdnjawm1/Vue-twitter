@@ -6,14 +6,16 @@
       px-3
       py-3
       border-b border-gray-100
-      hover:bg-gray-100
+      hover:bg-gray-50
       cursor-pointer
     "
   >
-    <img
-      :src="currentUser.profile_image_url"
-      class="w10 h-10 rounded-full hover:opacity-60 cursor-pointer"
-    />
+    <router-link :to="`/profile/${tweet.uid}`">
+      <img
+        :src="tweet.profile_image_url"
+        class="w10 h-10 rounded-full hover:opacity-60 cursor-pointer"
+      />
+    </router-link>
     <div class="flex-1 flex flex-col ml-3 space-y-2">
       <div class="text-sm space-x-1">
         <span class="font-bold">{{ tweet.email }}</span>
@@ -24,9 +26,9 @@
         }}</span>
       </div>
       <!-- tweet body -->
-      <div>
+      <router-link :to="`/tweet/${tweet.id}`">
         {{ tweet.tweet_body }}
-      </div>
+      </router-link>
       <!-- tweet actions -->
       <!-- comment button -->
       <div class="flex justify-between pr-12">
@@ -51,7 +53,15 @@
           <span class="ml-1 text-sm p-1">{{ tweet.num_retweets }}</span>
         </div>
         <!-- like button -->
-        <div class="text-gray-400 hover:text-red-500">
+        <div
+          v-if="!tweet.isLiked"
+          @click="handleLikes(tweet)"
+          class="text-gray-400 hover:text-red-400"
+        >
+          <i class="far fa-heart hover:bg-red-50 rounded-full p-2"></i>
+          <span class="ml-1 text-sm p-1">{{ tweet.num_likes }}</span>
+        </div>
+        <div v-else @click="handleLikes(tweet)" class="text-red-400">
           <i class="far fa-heart hover:bg-red-50 rounded-full p-2"></i>
           <span class="ml-1 text-sm p-1">{{ tweet.num_likes }}</span>
         </div>
@@ -82,6 +92,7 @@ import moment from "moment";
 import { ref } from "vue";
 import commentModal from "./CommentModal.vue";
 import handleRetweet from "../utils/handleRetweet";
+import handleLikes from "../utils/handleLikes";
 
 export default {
   components: { commentModal },
@@ -91,6 +102,7 @@ export default {
     return {
       moment,
       showCommentModal,
+      handleLikes,
       handleRetweet,
     };
   },

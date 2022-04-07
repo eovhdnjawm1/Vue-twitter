@@ -6,6 +6,7 @@ import Profile from '../pages/Profile.vue'
 import Login from '../pages/Login.vue'
 import Register from '../pages/Register.vue'
 import store from '../store'
+import TweetPage from '../pages/TweetPage.vue'
 
 const routes = [
     {
@@ -86,6 +87,17 @@ const routes = [
         }
     },
     {
+        path: '/profile/:uid',
+        component: Profile,
+
+
+        meta: {
+            isMenu: false,
+            layout: 'DefaultLayout',
+            requireAuth: true,
+        }
+    },
+    {
         path: '/profile',
         component: Profile,
         title: '더 보기',
@@ -102,6 +114,17 @@ const routes = [
         meta: {
             isMenu: false,
             layout: 'EmptyLayout',
+            requireAuth: true,
+        }
+    },
+    {
+        path: '/tweet/:id',
+        name: 'tweet',
+        component: TweetPage,
+        meta: {
+            isMenu: false,
+            layout: 'DefaultLayout',
+            requireAuth: true
         }
     },
     {
@@ -119,7 +142,7 @@ const router = createRouter({
     routes,
 })
 
-router.beforeEach((to, from, next) =>{
+router.beforeEach((to, from, next) => {
     const currentUser = store.state.user
     const requireAuth = to.matched.some((record) => record.meta.requireAuth)
     // not authenticated
