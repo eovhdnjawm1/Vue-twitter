@@ -123,7 +123,6 @@ const routes = [
         meta: {
             isMenu: false,
             layout: 'EmptyLayout',
-            requireAuth: true,
         }
     },
     {
