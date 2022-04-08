@@ -71,7 +71,7 @@ Vue, Vuex, tailwind, firebase를 이용하여 1인 작업을한 트위터 클론
 - Vue, Vuex - 2022.03.18(금) ~ 2022.04.08(화)
 
 ## 4. UI
-![image](https://user-images.githubusercontent.com/70947883/162257015-a2d65734-204d-4a97-aad2-2501a98310cf.png)
+![image](https://user-images.githubusercontent.com/70947883/162357587-df7972d1-03ed-4915-b672-4335e154967c.png)
 
 ## 5. Github
 ![image](https://user-images.githubusercontent.com/70947883/162259097-63c35592-4a6d-4dfe-98df-52e8952a275c.png)
